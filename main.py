@@ -1,8 +1,4 @@
 import importlib.util
-import sys
-import os
-
-import importlib.util
 import subprocess
 
 def check_and_install(package):
@@ -14,7 +10,7 @@ def check_and_install(package):
         try:
             subprocess.run(["pip", "install", package], check=True)
             print(f"{package} has been installed successfully.")
-            os.system("python p1.py")
+            subprocess.run(["python", "p1.py"], check=True)
         except subprocess.CalledProcessError:
             print(f"Failed to install {package}.")
 
