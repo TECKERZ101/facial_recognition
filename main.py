@@ -1,42 +1,21 @@
 import importlib.util
 import sys
+import os
 
-package = "deepface"
+import importlib.util
+import subprocess
 
-if package in sys.modules:
-    print(f"{package!r} already in sys.modules")
-elif (spec := importlib.util.find_spec(package)) is not None:
-    # If you choose to perform the actual import ...
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[package] = module
-    spec.loader.exec_module(module)
-    print(f"{package!r} has been imported")
-else:
-    print(f"can't find the {package!r} module")
+def check_and_install(package):
+    try:
+        spec = importlib.util.find_spec(package)
+        if spec is None:
+            raise ImportError(f"{package} is not installed")
+    except ImportError:
+        try:
+            subprocess.run(["pip", "install", package], check=True)
+            print(f"{package} has been installed successfully.")
+            os.system("python p1.py")
+        except subprocess.CalledProcessError:
+            print(f"Failed to install {package}.")
 
-
-from deepface import DeepFace
-
-
-objs = DeepFace.analyze(
-  img_path = "img.jpg", # Accepts a jpg as an input (has to be named img.jpg)
-  actions = ['age', 'gender', 'emotion'],
-)
-
-
-item = objs[0]
-
-
-
-
-gender_dict = item['gender']
-dominant_gender = item['dominant_gender']
-
-
-age = item['age']
-
-
-dominant_emotion = item['dominant_emotion']
-
-
-print("Age:", age, "\nEmotion:", dominant_emotion, "\nGender:", dominant_gender)
+check_and_install("deepface")
