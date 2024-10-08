@@ -1,35 +1,41 @@
 import tkinter as tk
-from tkinter import messagebox
 from PIL import Image, ImageTk
-import simplecamerawidget
+import cv2
 
-def take_photo():
-    try:
-        # Capture the photo
-        photo = simplecamerawidget.take_picture()
-        
-        # Convert the photo to a PIL Image
-        pil_image = Image.frombytes("RGB", photo.size, photo.tobytes())
-        
-        # Save the image
-        pil_image.save("img.jpg")
-        messagebox.showinfo("Success", "Photo saved successfully!")
-    except Exception as e:
-        messagebox.showerror("Error", f"Failed to capture or save photo: {str(e)}")
+class CameraApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Live Camera View")
+        self.master.geometry("640x500") # 800x600
+
+        self.label = tk.Label(self.master)
+        self.label.pack()
+
+        self.capture = cv2.VideoCapture(0)
+        self.update_frame()
+
+        self.button = tk.Button(self.master, text="Take Photo", command=self.take_photo)
+        self.button.pack(pady=(10, 0))  # Add some padding above the button
+        self.button.configure(bg="#4CAF50", fg="white")  # Change background color to green
+
+        self.button.pack()
+
+    def update_frame(self):
+        ret, frame = self.capture.read()
+        if ret:
+            cv2_im = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            img = Image.fromarray(cv2_im)
+            imgtk = ImageTk.PhotoImage(image=img)
+            self.label.config(image=imgtk)
+            self.label.image = imgtk
+        self.master.after(10, self.update_frame)
+
+    def take_photo(self):
+        ret, frame = self.capture.read()
+        if ret:
+            cv2.imwrite("img.jpg", frame)
+            print("Photo saved as img.jpg")
 
 root = tk.Tk()
-root.title("Photo Capture")
-
-# Create a frame for the camera widget
-camera_frame = tk.Frame(root)
-camera_frame.pack()
-
-# Add the camera widget
-camera_widget = simplecamerawidget.CameraWidget(camera_frame)
-camera_widget.pack()
-
-# Create a button to trigger photo capture
-capture_button = tk.Button(root, text="Capture Photo", command=take_photo)
-capture_button.pack(pady=10)
-
+camera_app = CameraApp(root)
 root.mainloop()
