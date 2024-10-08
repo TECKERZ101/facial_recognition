@@ -25,7 +25,7 @@ for package in packagesNeeded:
             print(f"Failed to install {package}.")
             exit("Load Error: 10")
 
-if deepfaceKnownInstalled == True and scwKnownInstalled = True:
+if deepfaceKnownInstalled == True and scwKnownInstalled == True:
     subprocess.run(["python", "recognition.py"], check=True)
 else:
     quit("Load Error: 11")
