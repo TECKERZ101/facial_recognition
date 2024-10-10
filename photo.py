@@ -35,6 +35,7 @@ class CameraApp:
         if ret:
             cv2.imwrite("img.jpg", frame)
             print("Photo saved as img.jpg")
+            root.quit()
 
 root = tk.Tk()
 camera_app = CameraApp(root)
