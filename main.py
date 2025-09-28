@@ -23,6 +23,12 @@ def live_analysis():
     except subprocess.CalledProcessError as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
 
+def train_face():
+    try:
+        subprocess.run(["python", "train.py"], check=True)
+    except subprocess.CalledProcessError as e:
+        messagebox.showerror("Error", f"An error occurred: {e}")
+
 def setup():
     try:
         subprocess.run(["python", "setup.py"], check=True)
@@ -44,7 +50,7 @@ BTN_ACTIVE_FG = "#dcdde1"
 root = tk.Tk()
 root.title("Facial Recognition")
 root.iconbitmap("logo.ico")
-root.geometry("370x370")
+root.geometry("370x420")
 root.configure(bg=BG_COLOR)
 
 # --- Load Roboto font (after root is created) ---
@@ -76,10 +82,13 @@ btn2 = tk.Button(menu_frame, text="Recognize Face", width=25, command=recognize_
                  font=btn_font, bg=BTN_BG, fg=BTN_FG, activebackground=BTN_ACTIVE_BG, activeforeground=BTN_ACTIVE_FG, bd=0, highlightthickness=0)
 btn2.pack(pady=7)
 
-# --- New Live Analysis Button ---
 btn_live = tk.Button(menu_frame, text="Live Analysis", width=25, command=live_analysis,
                      font=btn_font, bg=BTN_BG, fg=BTN_FG, activebackground=BTN_ACTIVE_BG, activeforeground=BTN_ACTIVE_FG, bd=0, highlightthickness=0)
 btn_live.pack(pady=7)
+
+btn_train = tk.Button(menu_frame, text="Add New Face (Train)", width=25, command=train_face,
+                      font=btn_font, bg=BTN_BG, fg=BTN_FG, activebackground=BTN_ACTIVE_BG, activeforeground=BTN_ACTIVE_FG, bd=0, highlightthickness=0)
+btn_train.pack(pady=7)
 
 btn3 = tk.Button(menu_frame, text="Setup", width=25, command=setup,
                  font=btn_font, bg=BTN_BG, fg=BTN_FG, activebackground=BTN_ACTIVE_BG, activeforeground=BTN_ACTIVE_FG, bd=0, highlightthickness=0)
